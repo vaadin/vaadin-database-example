@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Movie {
@@ -12,10 +15,13 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull(message = "Title is required")
     private String title;
 
     private String director;
 
+    @Min(value=1800, message = "No movie can be older than 18th century")
+    @Max(value=2030, message = "Movie should be released in the nearest feature if not yet")
     private int releaseYear;
 
     private String imbdLink;
