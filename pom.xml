@@ -138,6 +138,11 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.vaadin.thomas</groupId>
+            <artifactId>vaadincorner</artifactId>
+            <version>0.1.0</version>
+        </dependency>
     </dependencies>
 
     <build>

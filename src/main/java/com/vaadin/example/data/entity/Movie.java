@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -18,7 +20,9 @@ public class Movie {
     @NotNull(message = "Title is required")
     private String title;
 
-    private String director;
+    @ManyToOne
+    @JoinColumn(name = "director_id", nullable = false)
+    private Director director;
 
     @Min(value=1800, message = "No movie can be older than 18th century")
     @Max(value=2030, message = "Movie should be released in the nearest feature if not yet")
@@ -30,7 +34,7 @@ public class Movie {
         return title;
     }
 
-    public String getDirector() {
+    public Director getDirector() {
         return director;
     }
 
@@ -46,7 +50,7 @@ public class Movie {
 
     }
 
-    public Movie(String title, String director, int releaseYear, String imbdLink) {
+    public Movie(String title, Director director, int releaseYear, String imbdLink) {
         this.title = title;
         this.director= director;
         this.releaseYear = releaseYear;
@@ -56,6 +60,6 @@ public class Movie {
     @Override
     public String toString() {
         return String.format("Movie[title= %d, director = %s, producer = %s]", title,
-              director, releaseYear);
+              director.getName(), releaseYear);
     }
 }

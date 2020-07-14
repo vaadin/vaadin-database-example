@@ -1,15 +1,14 @@
-package com.vaadin.example;
+package com.vaadin.example.views;
 
 import com.vaadin.example.data.entity.Movie;
 import com.vaadin.example.data.repository.MovieRepository;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Route("movies")
+@Route(value = "movies", layout = MainView.class)
 public class MovieView extends VerticalLayout {
     MovieRepository repository;
 
@@ -19,15 +18,18 @@ public class MovieView extends VerticalLayout {
     }
 
     private void buildUI() {
-
         Grid<Movie> movies = new Grid<>(Movie.class);
-        movies.getColumnByKey("releaseYear").setWidth("55px");
-        movies.removeColumnByKey("imbdLink");
-        movies.addColumn(TemplateRenderer.<Movie>of("<a href='[[item.imbdLink]]'>Click to IMBD site</a>")
+        movies.setItems(repository.findAll());
+
+        movies.setColumns("title", "director.name", "releaseYear");
+        movies.getColumnByKey("director.name").setHeader("Director");
+        movies.addColumn(TemplateRenderer.<Movie>of(
+              "<a href='[[item.imbdLink]]'>Click to IMBD site</a>")
               .withProperty("imbdLink", Movie::getImbdLink))
               .setHeader("IMBD Link");
-        movies.setItems(repository.findAll());
+        movies.getColumnByKey("releaseYear").setWidth("55px");
         add(movies);
+       // add(new VaadinCorner());
     }
 
 }
