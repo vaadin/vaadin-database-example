@@ -21,14 +21,16 @@ public class MovieView extends VerticalLayout {
         Grid<Movie> movies = new Grid<>(Movie.class);
         movies.setItems(repository.findAll());
 
-        movies.setColumns("title", "director.name", "releaseYear");
-        movies.getColumnByKey("director.name").setHeader("Director");
+        //movies.setColumns("title", "director.name", "releaseYear");
+        movies.setColumns("title","releaseYear");
+        //movies.getColumnByKey("director.name").setHeader("Director");
         movies.addColumn(TemplateRenderer.<Movie>of(
               "<a href='[[item.imbdLink]]'>Click to IMBD site</a>")
               .withProperty("imbdLink", Movie::getImbdLink))
               .setHeader("IMBD Link");
         movies.getColumnByKey("releaseYear").setWidth("55px");
         add(movies);
+
        // add(new VaadinCorner());
     }
 

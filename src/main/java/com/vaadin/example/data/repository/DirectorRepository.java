@@ -1,13 +1,21 @@
 package com.vaadin.example.data.repository;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.vaadin.example.data.entity.Director;
-import org.springframework.data.repository.CrudRepository;
+import com.vaadin.example.data.mappers.DirectorRowMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-public interface DirectorRepository extends CrudRepository<Director, Long> {
+@Repository
+public class DirectorRepository {
 
-    List<Director> findAll();
-    Optional<Director> findByName(String name);
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    public Director findByName(String name) {
+        String query = "SELECT * FROM DIRECTORS WHERE name = ?";
+        return jdbcTemplate
+              .queryForObject(query, new DirectorRowMapper(), name);
+
+    }
 }
