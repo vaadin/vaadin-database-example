@@ -4,6 +4,7 @@ import com.vaadin.example.data.entity.Movie;
 import com.vaadin.example.data.repository.MovieRepository;
 import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.Route;
@@ -28,17 +29,17 @@ import org.springframework.beans.factory.annotation.Autowired;
         description = "This is an example Vaadin application.",
         enableInstallPrompt = false)
 @CssImport("./styles/shared-styles.css")
-@CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
 public class MainView extends VerticalLayout {
 
     MovieRepository repository;
 
     public MainView (@Autowired MovieRepository repository){
         this.repository = repository;
-        buildUI();
+        add(new H3("Accessing in-memory database using JdbcTemplate"));
+        buildGrid();
     }
 
-    private void buildUI() {
+    private void buildGrid() {
         Grid<Movie> movies = new Grid<>(Movie.class);
         movies.setItems(repository.findAll());
 
