@@ -15,8 +15,8 @@ public interface MovieRepository extends CrudRepository<Movie,Long> {
     @Query("SELECT * FROM movie")
     List<Movie> findAll();
 
-    @Query("SELECT DISTINCT dir.name FROM movie mov LEFT JOIN director dir ON mov.directorId = dir.id WHERE mov.id = :movieID")
-    String getDirectorName(@Param("movieID") Long movieId);
+    @Query("SELECT * FROM movie mov LEFT JOIN director dir ON mov.directorId = dir.id WHERE mov.id = :movieID")
+    Director getDirector(@Param("movieID") Long movieId);
 
    /** @Autowired
     JdbcTemplate jdbcTemplate;

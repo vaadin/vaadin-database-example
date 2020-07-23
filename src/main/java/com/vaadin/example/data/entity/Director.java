@@ -12,8 +12,6 @@ public class Director implements Serializable {
 
     private String name;
 
-    private Set<Movie> movies;
-
     protected Director(){
 
     }
