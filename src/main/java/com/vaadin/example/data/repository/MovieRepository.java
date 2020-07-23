@@ -2,15 +2,23 @@ package com.vaadin.example.data.repository;
 
 import java.util.List;
 
+import com.vaadin.example.data.entity.Director;
 import com.vaadin.example.data.entity.Movie;
-import com.vaadin.example.data.mappers.MovieRowMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class MovieRepository {
-    @Autowired
+public interface MovieRepository extends CrudRepository<Movie,Long> {
+
+    @Query("SELECT * FROM movie")
+    List<Movie> findAll();
+
+    @Query("SELECT DISTINCT dir.name FROM movie mov LEFT JOIN director dir ON mov.directorId = dir.id WHERE mov.id = :movieID")
+    String getDirectorName(@Param("movieID") Long movieId);
+
+   /** @Autowired
     JdbcTemplate jdbcTemplate;
 
     public void save(Movie movie) {
@@ -23,4 +31,5 @@ public class MovieRepository {
         List<Movie> movies = jdbcTemplate.query(query,  new MovieRowMapper());
         return movies;
     }
+   */
 }

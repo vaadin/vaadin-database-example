@@ -4,15 +4,22 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
+import org.springframework.data.relational.core.mapping.Column;
+
 public class Movie {
 
-    private Long id;
+    private @Id Long id;
+
+
 
     @NotNull(message = "Title is required")
     private String title;
 
+    @Column("directorId")
+    private Long directorId;
 
-    private Director director;
     @Min(value=1800, message = "No movie can be older than 18th century")
     @Max(value=2030, message = "Movie should be released in the nearest feature if not yet")
     private int releaseYear;
@@ -22,19 +29,16 @@ public class Movie {
     public Movie(){
     }
 
-    public Movie(String title, Director director, int releaseYear, String imbdLink) {
+    @PersistenceConstructor
+    public Movie(String title, long directorId, int releaseYear, String imbdLink) {
         this.title = title;
-        this.director= director;
+        this.directorId = directorId;
         this.releaseYear = releaseYear;
         this.imbdLink = imbdLink;
     }
 
     public String getTitle() {
         return title;
-    }
-
-    public Director getDirector() {
-        return director;
     }
 
     public int getReleaseYear() {
@@ -45,6 +49,10 @@ public class Movie {
         return imbdLink;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -53,9 +61,6 @@ public class Movie {
         this.title = title;
     }
 
-    public void setDirector(Director director) {
-        this.director = director;
-    }
 
     public void setReleaseYear(int releaseYear) {
         this.releaseYear = releaseYear;
@@ -65,10 +70,9 @@ public class Movie {
         this.imbdLink = imbdLink;
     }
 
-
     @Override
     public String toString() {
-        return String.format("Movie[title= %d, director = %s, producer = %s]", title,
-              director.getName(), releaseYear);
+        return String
+              .format("Movie[title= %s, producer = %d]", title, releaseYear);
     }
 }

@@ -1,17 +1,14 @@
 package com.vaadin.example.views;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.applayout.AppLayout;
-import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.example.data.entity.Movie;
+import com.vaadin.example.data.repository.MovieRepository;
 import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.tabs.Tab;
-import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.PWA;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * A sample Vaadin view class.
@@ -32,23 +29,33 @@ import com.vaadin.flow.server.PWA;
         enableInstallPrompt = false)
 @CssImport("./styles/shared-styles.css")
 @CssImport(value = "./styles/vaadin-text-field-styles.css", themeFor = "vaadin-text-field")
-public class MainView extends AppLayout {
+public class MainView extends VerticalLayout {
 
-    private Tabs tabs = new Tabs();
-    private Map<Class<? extends Component>, Tab> navigationTargetToTab = new HashMap<>();
+    MovieRepository repository;
 
-    public MainView() {
-
-        addMenuTab("Movies", MovieView.class);
-        tabs.setOrientation(Tabs.Orientation.VERTICAL);
-        addToDrawer(tabs);
-        addToNavbar(new DrawerToggle());
+    public MainView (@Autowired MovieRepository repository){
+        this.repository = repository;
+        buildUI();
     }
 
-    private void addMenuTab(String label, Class<? extends Component> target) {
-        Tab tab = new Tab(new RouterLink(label, target));
-        navigationTargetToTab.put(target, tab);
-        tabs.add(tab);
+    private void buildUI() {
+        Grid<Movie> movies = new Grid<>(Movie.class);
+        movies.setItems(repository.findAll());
+
+        //movies.setColumns("title", "director.name", "releaseYear");
+        movies.setColumns("title","releaseYear");
+        //movies.getColumnByKey("director.name").setHeader("Director");
+        movies.addColumn(
+              movie -> repository.getDirectorName(movie.getId()))
+              .setHeader("Director");
+        movies.addColumn(TemplateRenderer.<Movie>of(
+              "<a href='[[item.imbdLink]]'>Click to IMBD site</a>")
+              .withProperty("imbdLink", Movie::getImbdLink))
+              .setHeader("IMBD Link");
+        movies.getColumnByKey("releaseYear").setWidth("55px");
+        add(movies);
+
+        // add(new VaadinCorner());
     }
 
 }
