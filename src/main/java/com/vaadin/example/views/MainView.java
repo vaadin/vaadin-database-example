@@ -24,9 +24,10 @@ import org.springframework.beans.factory.annotation.Autowired;
  * browser tab/window.
  */
 @Route
-@PWA(name = "Vaadin Application",
-        shortName = "Vaadin App",
-        description = "This is an example Vaadin application.",
+@PWA(name = "Vaadin Database access example",
+        shortName = "Vaadin Database App",
+        description = "This is an example Vaadin application with an access "
+              + "to in-memory database using JdbcTemplate.",
         enableInstallPrompt = false)
 @CssImport("./styles/shared-styles.css")
 public class MainView extends VerticalLayout {

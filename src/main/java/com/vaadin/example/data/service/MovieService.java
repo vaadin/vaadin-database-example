@@ -23,4 +23,8 @@ public class MovieService {
     public String getDirectorName(Long movieId) {
         return repository.getDirector(movieId).getName();
     }
+
+    public Movie saveMovie (Movie movie) {
+        return repository.save(movie);
+    }
 }
