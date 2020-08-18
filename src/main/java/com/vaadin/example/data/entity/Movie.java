@@ -1,78 +1,65 @@
 package com.vaadin.example.data.entity;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.relational.core.mapping.Column;
-
 public class Movie {
 
-    private @Id Long id;
+	private Long id;
+	private String title;
+	private Director director;
+	private int releaseYear;
+	private String imbdLink;
 
+	public Movie() {
+	}
 
+	public Movie(String title, int releaseYear, String imbdLink, Director director) {
+		this.title = title;
+		this.releaseYear = releaseYear;
+		this.imbdLink = imbdLink;
+		this.director = director;
+	}
 
-    @NotNull(message = "Title is required")
-    private String title;
+	public String getTitle() {
+		return title;
+	}
 
-    @Column("directorId")
-    private Long directorId;
+	public int getReleaseYear() {
+		return releaseYear;
+	}
 
-    @Min(value=1800, message = "No movie can be older than 18th century")
-    @Max(value=2030, message = "Movie should be released in the nearest feature if not yet")
-    private int releaseYear;
+	public String getImbdLink() {
+		return imbdLink;
+	}
 
-    private String imbdLink;
+	public Long getId() {
+		return id;
+	}
 
-    public Movie(){
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    @PersistenceConstructor
-    public Movie(String title, long directorId, int releaseYear, String imbdLink) {
-        this.title = title;
-        this.directorId = directorId;
-        this.releaseYear = releaseYear;
-        this.imbdLink = imbdLink;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setReleaseYear(int releaseYear) {
+		this.releaseYear = releaseYear;
+	}
 
-    public int getReleaseYear() {
-        return releaseYear;
-    }
+	public void setImbdLink(String imbdLink) {
+		this.imbdLink = imbdLink;
+	}
 
-    public String getImbdLink() {
-        return imbdLink;
-    }
+	public Director getDirector() {
+		return director;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public void setDirector(Director director) {
+		this.director = director;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
-    }
-
-    public void setImbdLink(String imbdLink) {
-        this.imbdLink = imbdLink;
-    }
-
-    @Override
-    public String toString() {
-        return String
-              .format("Movie[title= %s, producer = %d]", title, releaseYear);
-    }
+	@Override
+	public String toString() {
+		return String.format("Movie[title= %s, producer = %d]", title, releaseYear);
+	}
 }

@@ -1,61 +1,62 @@
 package com.vaadin.example;
 
-import com.vaadin.example.data.entity.Director;
-import com.vaadin.example.data.entity.Movie;
-import com.vaadin.example.data.service.DirectorService;
-import com.vaadin.example.data.service.MovieService;
-import com.vaadin.flow.server.ServiceInitEvent;
-import com.vaadin.flow.server.VaadinServiceInitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-// Runs once when a VaadinService is initiated. The best place to
-// initiate a DB structure and populate it.
+import com.vaadin.flow.server.ServiceInitEvent;
+import com.vaadin.flow.server.VaadinServiceInitListener;
+
+/**
+ * This init listener is run once whenever the Vaadin context starts. As such,
+ * it is a great place to create dummy data.
+ * <p>
+ * See the <code>application.properties</code> file for database connection
+ * properties.
+ */
 @Service
-public class ApplicationServiceInitListener implements
-      VaadinServiceInitListener {
+public class ApplicationServiceInitListener implements VaadinServiceInitListener {
 
-    @Autowired
-    MovieService movieService;
-    @Autowired
-    DirectorService directorService;
-    @Autowired
-    JdbcTemplate jdbcTemplate;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 
-    @Override
-    public void serviceInit(ServiceInitEvent serviceInitEvent) {
-        System.out.println("_________DB initiation has started____________");
-        initDBStructure();
-        populateRepositories();
-        System.out.println("_________DB initiation has finished____________");
-    }
+	@Override
+	public void serviceInit(ServiceInitEvent serviceInitEvent) {
+		System.out.println("_________DB initiation has started____________");
 
-    // Initializing tables in the database
-    // First, remove if already exist
-    private void initDBStructure() {
-        jdbcTemplate.execute("DROP TABLE movie IF EXISTS ");
-        jdbcTemplate.execute("DROP TABLE director IF EXISTS ");
-        jdbcTemplate.execute(
-              "CREATE TABLE movie(id SERIAL, title VARCHAR(255),directorId FLOAT ,"
-                    + " release_year INTEGER ,imbd_link VARCHAR(255))");
-        jdbcTemplate
-              .execute("CREATE TABLE director(id SERIAL, name VARCHAR(255))");
-    }
+		// Initializing tables in the database
 
-    private void populateRepositories() {
-        Director gray = directorService
-              .saveDirector(new Director("F. Gardy Gray"));
-        Director johnson = directorService
-              .saveDirector(new Director("Rian Johnson"));
-        movieService.saveMovie(
-              new Movie("Law Abiding Citizen", gray.getId(), 2009,
-                    "https://www.imdb.com/title/tt1197624/"));
-        movieService.saveMovie(new Movie("Knives Out", johnson.getId(), 2019,
-              "https://www.imdb.com/title/tt8946378/"));
-        movieService.saveMovie(
-              new Movie("Star wars: The last jedi", johnson.getId(), 2017,
-                    "https://www.imdb.com/title/tt2527336/"));
-    }
+		// First, remove if already exist
+		initDBStructure();
+		// insert data
+		populateData();
+
+		System.out.println("_________DB initiation has finished____________");
+	}
+
+	private void initDBStructure() {
+		jdbcTemplate.execute("DROP TABLE movie IF EXISTS ");
+		jdbcTemplate.execute("DROP TABLE director IF EXISTS ");
+
+		jdbcTemplate.execute("CREATE TABLE director (id IDENTITY NOT NULL PRIMARY KEY, name VARCHAR(255))");
+		jdbcTemplate.execute("CREATE TABLE movie (id IDENTITY NOT NULL PRIMARY KEY, title VARCHAR(255), directorId INT,"
+				+ "release_year INTEGER , imbd_link VARCHAR(255),"
+				+ "CONSTRAINT FK_MOVIE_DIRECTOR FOREIGN KEY (directorId) REFERENCES director(id))");
+	}
+
+	private void populateData() {
+
+		jdbcTemplate.update("INSERT INTO director VALUES (null, 'F. Gardy Gray')");
+		jdbcTemplate.update("INSERT INTO director VALUES (null, 'Rian Johnson')");
+
+		jdbcTemplate.update(
+				"INSERT INTO movie VALUES (null, 'Law Abiding Citizen', 1,2009, 'https://www.imdb.com/title/tt1197624/')");
+
+		jdbcTemplate.update(
+				"INSERT INTO movie VALUES (null, 'Knives Out', 2, 2019, 'https://www.imdb.com/title/tt8946378/')");
+		jdbcTemplate.update(
+				"INSERT INTO movie VALUES (null, 'The Last Jedi', 2, 2017, 'https://www.imdb.com/title/tt2527336/')");
+
+	}
 
 }

@@ -1,7 +1,24 @@
-# Project Base for Vaadin and Spring Boot
+# Database conenction example using Spring JdbcTemplate
 
-This is an example project that can be used as a starting point to create your own Vaadin application with Spring Boot.
-It contains all the necessary configuration and some placeholder files to get you started.
+This is a simple example project that demonstrates how to fetch data from a SQL database and show it in a Vaadin application. 
+
+The app uses an embedded H2 database and generates some dummy data (in the ApplicationServiceInitListener class), but you can point it to any  database.
+
+To use your own database:
+
+1. Configure the connection properties in the `application.properties` file to match your DB
+2. Change the JDBC driver dependency in `pom.xml` to match your database type and vendor:
+
+```
+	    <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+```
+3. Remove the dummy data creation in `ApplicationServiceInitListener.java`
+4. Modify the `Movie`, `Director`, and `MovieService` classes to match your database structure.
+5. Modify the `MainView` class to match your data structure
 
 
 ## Running the Application

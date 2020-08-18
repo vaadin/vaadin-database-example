@@ -1,5 +1,9 @@
 package com.vaadin.example.views;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.vaadin.thomas.VaadinCorner;
+
+import com.vaadin.example.ApplicationServiceInitListener;
 import com.vaadin.example.data.entity.Movie;
 import com.vaadin.example.data.service.MovieService;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -8,56 +12,48 @@ import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * A sample Vaadin view class.
+ * A simple Vaadin View class that shows all Movies in a database.
  * <p>
- * To implement a Vaadin view just extend any Vaadin component and
- * use @Route annotation to announce it in a URL as a Spring managed
- * bean.
- * Use the @PWA annotation make the application installable on phones,
- * tablets and some desktop browsers.
- * <p>
- * A new instance of this class is created for every new user and every
- * browser tab/window.
+ * See {@link MovieService} for details on the database, and
+ * {@link ApplicationServiceInitListener} for adding more demo data.
  */
 @Route
-@PWA(name = "Vaadin Database access example",
-        shortName = "Vaadin Database App",
-        description = "This is an example Vaadin application with an access "
-              + "to in-memory database using JdbcTemplate.",
-        enableInstallPrompt = false)
 @CssImport("./styles/shared-styles.css")
 public class MainView extends VerticalLayout {
 
-    MovieService movieService;
+	public MainView(@Autowired MovieService movieService) {
 
-    public MainView (@Autowired MovieService movieService){
-        this.movieService = movieService;
-        add(new H3("Accessing in-memory database using JdbcTemplate"));
-        buildGrid();
-    }
+		// Create and add header text
+		add(new H3("Accessing in-memory database using JdbcTemplate"));
 
-    private void buildGrid() {
-        Grid<Movie> movies = new Grid<>(Movie.class);
-        movies.setItems(movieService.getMovies());
+		// create Grid component
+		final Grid<Movie> movies = new Grid<>(Movie.class);
 
-        //movies.setColumns("title", "director.name", "releaseYear");
-        movies.setColumns("title","releaseYear");
-        //movies.getColumnByKey("director.name").setHeader("Director");
-        movies.addColumn(
-              movie -> movieService.getDirectorName(movie.getId()))
-              .setHeader("Director");
-        movies.addColumn(TemplateRenderer.<Movie>of(
-              "<a href='[[item.imbdLink]]'>Click to IMBD site</a>")
-              .withProperty("imbdLink", Movie::getImbdLink))
-              .setHeader("IMBD Link");
-        movies.getColumnByKey("releaseYear").setWidth("55px");
-        add(movies);
+		// fetch all movies from our Service
+		movies.setItems(movieService.getMovies());
 
-        // add(new VaadinCorner());
-    }
+		// Use these auto-generated columns
+		movies.setColumns("title", "releaseYear");
+
+		// Add 'Director' column
+		movies.addColumn(movie -> movie.getDirector().getName()).setHeader("Director");
+
+		// Add link to iMDB column; the TemplateRenderer allows us to use a HTML link.
+		movies.addColumn(
+				TemplateRenderer.<Movie>of("<a href='[[item.imbdLink]]' target='_blank'>Click to IMBD site</a>")
+						.withProperty("imbdLink", Movie::getImbdLink))
+				.setHeader("IMBD Link");
+
+		// set one column to specific width
+		movies.getColumnByKey("releaseYear").setWidth("55px");
+
+		// Add Grid to view
+		add(movies);
+
+		// add vaadin demo helper component, not relevant to example
+		add(new VaadinCorner());
+	}
 
 }

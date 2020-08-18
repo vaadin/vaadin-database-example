@@ -1,30 +1,31 @@
 package com.vaadin.example.data.entity;
 
+public class Director {
 
-import java.io.Serializable;
-import java.util.Set;
+	private Long id;
+	private String name;
 
-import org.springframework.data.annotation.Id;
+	public Director() {
 
-public class Director implements Serializable {
+	}
 
-    private @Id Long id;
+	public Director(String name) {
+		this.name = name;
+	}
 
-    private String name;
+	public String getName() {
+		return name;
+	}
 
-    protected Director(){
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public Director(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Long getId () {
-        return id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 }
