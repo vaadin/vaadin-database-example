@@ -126,11 +126,6 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>org.vaadin.thomas</groupId>
-            <artifactId>vaadincorner</artifactId>
-            <version>0.1.0</version>
-        </dependency>
     </dependencies>
 
     <build>

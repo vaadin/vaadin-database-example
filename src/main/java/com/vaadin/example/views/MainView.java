@@ -1,7 +1,6 @@
 package com.vaadin.example.views;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.vaadin.thomas.VaadinCorner;
 
 import com.vaadin.example.ApplicationServiceInitListener;
 import com.vaadin.example.data.entity.Movie;
@@ -23,37 +22,33 @@ import com.vaadin.flow.router.Route;
 @CssImport("./styles/shared-styles.css")
 public class MainView extends VerticalLayout {
 
-	public MainView(@Autowired MovieService movieService) {
+    public MainView(@Autowired MovieService movieService) {
 
-		// Create and add header text
-		add(new H3("Accessing in-memory database using JdbcTemplate"));
+        // Create and add header text
+        add(new H3("Accessing in-memory database using JdbcTemplate"));
 
-		// create Grid component
-		final Grid<Movie> movies = new Grid<>(Movie.class);
+        // create Grid component
+        final Grid<Movie> movies = new Grid<>(Movie.class);
 
-		// fetch all movies from our Service
-		movies.setItems(movieService.getMovies());
+        // fetch all movies from our Service
+        movies.setItems(movieService.getMovies());
 
-		// Use these auto-generated columns
-		movies.setColumns("title", "releaseYear");
+        // Use these auto-generated columns
+        movies.setColumns("title", "releaseYear");
 
-		// Add 'Director' column
-		movies.addColumn(movie -> movie.getDirector().getName()).setHeader("Director");
+        // Add 'Director' column
+        movies.addColumn(movie -> movie.getDirector().getName()).setHeader("Director");
 
-		// Add link to iMDB column; the TemplateRenderer allows us to use a HTML link.
-		movies.addColumn(
-				TemplateRenderer.<Movie>of("<a href='[[item.imbdLink]]' target='_blank'>Click to IMBD site</a>")
-						.withProperty("imbdLink", Movie::getImbdLink))
-				.setHeader("IMBD Link");
+        // Add link to iMDB column; the TemplateRenderer allows us to use a HTML link.
+        movies.addColumn(
+                TemplateRenderer.<Movie>of("<a href='[[item.imbdLink]]' target='_blank'>Click to IMBD site</a>").withProperty("imbdLink", Movie::getImbdLink))
+                .setHeader("IMBD Link");
 
-		// set one column to specific width
-		movies.getColumnByKey("releaseYear").setWidth("55px");
+        // set one column to specific width
+        movies.getColumnByKey("releaseYear").setWidth("55px");
 
-		// Add Grid to view
-		add(movies);
-
-		// add vaadin demo helper component, not relevant to example
-		add(new VaadinCorner());
-	}
+        // Add Grid to view
+        add(movies);
+    }
 
 }
