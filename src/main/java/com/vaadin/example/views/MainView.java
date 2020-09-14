@@ -3,6 +3,7 @@ package com.vaadin.example.views;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.example.ApplicationServiceInitListener;
+import com.vaadin.example.corner.VaadinCorner;
 import com.vaadin.example.data.entity.Movie;
 import com.vaadin.example.data.service.MovieService;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -49,6 +50,9 @@ public class MainView extends VerticalLayout {
 
         // Add Grid to view
         add(movies);
+
+        // add vaadin demo helper component, not relevant to example
+        add(new VaadinCorner());
     }
 
 }
