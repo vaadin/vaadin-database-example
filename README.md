@@ -1,4 +1,4 @@
-# Database conenction example using Spring JdbcTemplate
+# Database connection example using Spring JdbcTemplate
 
 This is a simple example project that demonstrates how to fetch data from a SQL database and show it in a Vaadin application. 
 
