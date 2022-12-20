@@ -17,3 +17,5 @@ error-screenshots/
 webpack.generated.js
 types.d.ts
 tsconfig.json
+webpack.config.js
+pnpmfile.js
