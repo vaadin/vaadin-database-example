@@ -46,16 +46,16 @@ public class ApplicationServiceInitListener implements VaadinServiceInitListener
 
 	private void populateData() {
 
-		jdbcTemplate.update("INSERT INTO director VALUES (null, 'F. Gardy Gray')");
-		jdbcTemplate.update("INSERT INTO director VALUES (null, 'Rian Johnson')");
+		jdbcTemplate.update("INSERT INTO director VALUES (DEFAULT, 'F. Gardy Gray')");
+		jdbcTemplate.update("INSERT INTO director VALUES (DEFAULT, 'Rian Johnson')");
 
 		jdbcTemplate.update(
-				"INSERT INTO movie VALUES (null, 'Law Abiding Citizen', 1,2009, 'https://www.imdb.com/title/tt1197624/')");
+				"INSERT INTO movie VALUES (DEFAULT, 'Law Abiding Citizen', 1,2009, 'https://www.imdb.com/title/tt1197624/')");
 
 		jdbcTemplate.update(
-				"INSERT INTO movie VALUES (null, 'Knives Out', 2, 2019, 'https://www.imdb.com/title/tt8946378/')");
+				"INSERT INTO movie VALUES (DEFAULT, 'Knives Out', 2, 2019, 'https://www.imdb.com/title/tt8946378/')");
 		jdbcTemplate.update(
-				"INSERT INTO movie VALUES (null, 'The Last Jedi', 2, 2017, 'https://www.imdb.com/title/tt2527336/')");
+				"INSERT INTO movie VALUES (DEFAULT, 'The Last Jedi', 2, 2017, 'https://www.imdb.com/title/tt2527336/')");
 
 	}
 
