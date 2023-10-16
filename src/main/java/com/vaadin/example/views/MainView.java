@@ -1,5 +1,6 @@
 package com.vaadin.example.views;
 
+import com.vaadin.flow.data.renderer.LitRenderer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.example.ApplicationServiceInitListener;
@@ -10,7 +11,6 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.data.renderer.TemplateRenderer;
 import com.vaadin.flow.router.Route;
 
 /**
@@ -42,7 +42,7 @@ public class MainView extends VerticalLayout {
 
         // Add link to iMDB column; the TemplateRenderer allows us to use a HTML link.
         movies.addColumn(
-                TemplateRenderer.<Movie>of("<a href='[[item.imbdLink]]' target='_blank'>Click to IMBD site</a>").withProperty("imbdLink", Movie::getImbdLink))
+                LitRenderer.<Movie>of("<a href='${item.imbdLink}' target='_blank'>Click to IMBD site</a>").withProperty("imbdLink", Movie::getImbdLink))
                 .setHeader("IMBD Link");
 
         // set one column to specific width
